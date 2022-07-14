@@ -1031,6 +1031,41 @@ function Output($dest='', $name='', $isUTF8=false)
 }
 
 /*******************************************************************************
+*                           ADDED Public methods                               *
+*******************************************************************************/
+
+
+public function GetVerticalPosition() {
+  // Include page and Y position of the document
+  return array(
+    'page' => $this->PageNo(),
+    'y' => $this->GetY(),
+  );
+}
+
+public function SetVerticalPosition( $pos ) {
+  // Set the page and Y position of the document
+  $this->page = $pos['page'];
+  $this->SetY( $pos['y'] );
+}
+
+public function FurthestVerticalPosition( $aPos, $bPos = null ) {
+  if ( $bPos === null ) $bPos = $this->GetVerticalPosition();
+
+  // Returns the "furthest" vertical position between two points, based on page and Y position
+  if ( 
+    ($aPos['page'] > $bPos['page']) // Furthest position is located on another page
+    ||
+    ($aPos['page'] == $bPos['page'] && $aPos['y'] > $bPos['y'] ) // Furthest position is within the same page, but further down
+  ) {
+    return $aPos;
+  }else{
+    return $bPos;
+  }
+}
+
+
+/*******************************************************************************
 *                              Protected methods                               *
 *******************************************************************************/
 
